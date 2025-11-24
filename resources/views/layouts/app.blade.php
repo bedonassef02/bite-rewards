@@ -28,9 +28,11 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-grow">
                 {{ $slot }}
             </main>
+
+            <x-footer />
         </div>
     </body>
 </html>
