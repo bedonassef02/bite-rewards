@@ -151,8 +151,39 @@ class ShopController extends Controller
     {
         $this->authorize('update', $shop);
 
+        $user = Auth::user();
+
+        // Get Stripe Price ID from environment
+        $priceId = env('STRIPE_PRICE_ID', 'price_1QRxyzABCDEF123456'); // Replace with your actual Price ID
+
+        try {
+            // Create Stripe Checkout Session
+            return $user->newSubscription('premium', $priceId)
+                ->trialDays(0)
+                ->checkout([
+                    'success_url' => route('shops.payment.success', ['shop' => $shop->slug]) . '?session_id={CHECKOUT_SESSION_ID}',
+                    'cancel_url' => route('shops.payment.cancel', ['shop' => $shop->slug]),
+                    'metadata' => [
+                        'shop_id' => $shop->id,
+                    ],
+                ]);
+        } catch (\Exception $e) {
+            return redirect()->route('shops.plans')->with('error', 'Payment system is not configured yet. Please contact support.');
+        }
+    }
+
+    public function paymentSuccess(Request $request, Shop $shop)
+    {
+        $this->authorize('update', $shop);
+
+        // Update shop to premium
         $shop->update(['plan' => 'premium']);
 
         return redirect()->route('dashboard')->with('status', 'Successfully upgraded to Premium! Your shop is now featured.');
+    }
+
+    public function paymentCancel(Shop $shop)
+    {
+        return redirect()->route('shops.plans')->with('error', 'Payment was cancelled. You can try again anytime.');
     }
 }

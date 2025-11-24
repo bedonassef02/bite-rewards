@@ -25,6 +25,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Subscription
     Route::get('/plans', [ShopController::class, 'plans'])->name('shops.plans');
     Route::post('/shops/{shop}/upgrade', [ShopController::class, 'upgrade'])->name('shops.upgrade');
+    Route::get('/shops/{shop}/payment/success', [ShopController::class, 'paymentSuccess'])->name('shops.payment.success');
+    Route::get('/shops/{shop}/payment/cancel', [ShopController::class, 'paymentCancel'])->name('shops.payment.cancel');
 
     // Visits
     Route::post('/visits', [VisitController::class, 'store'])->name('visits.store');
