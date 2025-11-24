@@ -36,13 +36,21 @@ class VisitController extends Controller
             ->where('shop_id', $shop->id)
             ->count();
         
-        $reward = ($count % $shop->visits_required) === 0;
+        $rewardEarned = ($count % $shop->visits_required) === 0;
+
+        if ($rewardEarned) {
+            \App\Models\Reward::create([
+                'user_id' => $customer->id,
+                'shop_id' => $shop->id,
+                'status' => 'available',
+            ]);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Visit recorded!',
             'total_visits' => $count,
-            'reward_earned' => $reward
+            'reward_earned' => $rewardEarned
         ]);
     }
 }

@@ -14,9 +14,13 @@
                             <div class="p-8 flex flex-col h-full">
                                 <div class="flex items-center justify-between mb-4">
                                     <h3 class="text-2xl font-bold text-gray-900 group-hover:text-brand transition-colors">{{ $shop->name }}</h3>
-                                    <div class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center text-brand">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                    </div>
+                                    @if($shop->logo_path)
+                                        <img src="{{ asset('storage/' . $shop->logo_path) }}" alt="{{ $shop->name }}" class="w-12 h-12 rounded-full object-cover border border-gray-100">
+                                    @else
+                                        <div class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center text-brand">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </div>
+                                    @endif
                                 </div>
                                 <p class="text-gray-600 mb-6 flex-grow leading-relaxed">{{ Str::limit($shop->description, 100) }}</p>
                                 <div class="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-gray-800 leading-tight">
-            {{ $shop->name }}
+            Shop Details
         </h2>
     </x-slot>
 
@@ -9,13 +9,22 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-3xl border border-gray-100">
                 <div class="p-10 text-gray-900">
+                    <div class="flex items-center space-x-6 mb-8">
+                        @if($shop->logo_path)
+                            <img src="{{ asset('storage/' . $shop->logo_path) }}" alt="{{ $shop->name }}" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg">
+                        @endif
+                        <div>
+                             <h1 class="text-3xl font-bold text-gray-900">{{ $shop->name }}</h1>
+                             <p class="text-gray-500 mt-1">Reward every {{ $shop->visits_required }} visits</p>
+                        </div>
+                    </div>
+
                     <p class="text-xl text-gray-600 mb-10 leading-relaxed">{{ $shop->description }}</p>
                     
-                    <div class="p-8 bg-gray-50 rounded-3xl border border-gray-100">
+                    <div class="p-8 bg-gray-50 rounded-3xl border border-gray-100 mb-10">
                         <h3 class="text-2xl font-bold text-center mb-2">Your Loyalty Progress</h3>
                         <p class="text-center text-gray-500 mb-8">
                             You have visited <span class="font-bold text-brand text-2xl mx-1">{{ $visitCount }}</span> times.
-                            <br/>Reward at {{ $shop->visits_required }} visits.
                         </p>
 
                         <!-- Progress Bar -->
@@ -29,10 +38,55 @@
                         @if($progress >= 100 || ($visitCount > 0 && $visitCount % $shop->visits_required == 0))
                             <div class="text-center mt-6 p-6 bg-green-50 text-green-800 rounded-2xl border border-green-100 animate-bounce shadow-sm">
                                 <p class="font-bold text-lg">🎉 You've earned a free meal!</p>
-                                <p class="text-sm">Show your QR code to redeem.</p>
+                                <p class="text-sm">Check your rewards below.</p>
                             </div>
                         @endif
                     </div>
+
+                    <!-- Rewards Section -->
+                    @if(count($rewards) > 0)
+                        <div class="mb-10">
+                            <h3 class="text-2xl font-bold mb-6">Available Rewards</h3>
+                            <div class="grid gap-4">
+                                @foreach($rewards as $reward)
+                                    <div class="p-6 bg-white border border-brand rounded-2xl shadow-sm flex items-center justify-between">
+                                        <div>
+                                            <p class="font-bold text-lg text-brand">Free Reward Available!</p>
+                                            <p class="text-sm text-gray-500">Earned on {{ $reward->created_at->format('M d, Y') }}</p>
+                                        </div>
+                                        <button class="px-6 py-2 bg-brand text-white rounded-full font-bold text-sm hover:bg-orange-600 transition">
+                                            Redeem
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- History Section -->
+                    @if(count($history) > 0)
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6">Visit History</h3>
+                            <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-100">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-100">
+                                        @foreach($history as $visit)
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $visit->visited_at->format('M d, Y') }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $visit->visited_at->format('h:i A') }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="mt-10 text-center">
                         <h4 class="text-lg font-semibold mb-6 text-gray-400 uppercase tracking-widest text-xs">Action</h4>

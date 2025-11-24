@@ -9,7 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-3xl border border-gray-100">
                 <div class="p-10 text-gray-900">
-                    <form method="POST" action="{{ route('shops.store') }}">
+                    <form method="POST" action="{{ route('shops.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Name -->
@@ -17,6 +17,13 @@
                             <x-input-label for="name" :value="__('Shop Name')" />
                             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        </div>
+
+                        <!-- Logo -->
+                        <div class="mt-6">
+                            <x-input-label for="logo" :value="__('Shop Logo (Optional)')" />
+                            <input id="logo" name="logo" type="file" class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-brand hover:file:bg-orange-100" />
+                            <x-input-error :messages="$errors->get('logo')" class="mt-2" />
                         </div>
 
                         <!-- Description -->
