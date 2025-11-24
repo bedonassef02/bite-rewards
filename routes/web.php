@@ -21,6 +21,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/shops/{shop}', [ShopController::class, 'update'])->name('shops.update');
     Route::get('/shops/scan', [ShopController::class, 'scan'])->name('shops.scan'); // Specific route before show
     Route::get('/shops/{shop}', [ShopController::class, 'show'])->name('shops.show');
+    
+    // Subscription
+    Route::get('/plans', [ShopController::class, 'plans'])->name('shops.plans');
+    Route::post('/shops/{shop}/upgrade', [ShopController::class, 'upgrade'])->name('shops.upgrade');
 
     // Visits
     Route::post('/visits', [VisitController::class, 'store'])->name('visits.store');

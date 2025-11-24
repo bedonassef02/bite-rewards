@@ -141,4 +141,18 @@ class ShopController extends Controller
         
         return view('shops.scan', compact('shop'));
     }
+
+    public function plans()
+    {
+        return view('shops.plans');
+    }
+
+    public function upgrade(Shop $shop)
+    {
+        $this->authorize('update', $shop);
+
+        $shop->update(['plan' => 'premium']);
+
+        return redirect()->route('dashboard')->with('status', 'Successfully upgraded to Premium! Your shop is now featured.');
+    }
 }
