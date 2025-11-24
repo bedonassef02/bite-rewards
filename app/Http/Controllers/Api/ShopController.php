@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ManagesShops;
 use App\Http\Requests\StoreShopRequest;
 use App\Http\Requests\UpdateShopRequest;
 use App\Models\Shop;
 use App\Services\ShopService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
+    use ManagesShops;
+
     protected $shopService;
 
     public function __construct(ShopService $shopService)
@@ -18,10 +22,12 @@ class ShopController extends Controller
         $this->shopService = $shopService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        // Return all shops for customers to see
-        return response()->json(Shop::with('owner:id,name')->get());
+        // Return shops with filters/sorting applied
+        $shops = $this->getShopsQuery($request)->get();
+        
+        return response()->json($shops);
     }
 
     public function store(StoreShopRequest $request)
@@ -41,22 +47,24 @@ class ShopController extends Controller
              return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $shop = $this->shopService->createShop(Auth::user(), $request->validated());
+        $shop = $this->createShopData(Auth::user(), $request->validated());
 
         return response()->json($shop, 201);
     }
 
     public function show(Shop $shop)
     {
-        return response()->json($shop->load('owner:id,name'));
+        $data = $this->getShopData($shop, Auth::user());
+        
+        return response()->json($data);
     }
 
     public function update(UpdateShopRequest $request, Shop $shop)
     {
         $this->authorize('update', $shop);
 
-        $this->shopService->updateShop($shop, $request->validated());
+        $shop = $this->updateShopData($shop, $request->validated());
 
-        return response()->json($shop->refresh());
+        return response()->json($shop);
     }
 }

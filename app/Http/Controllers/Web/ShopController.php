@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ManagesShops;
 use App\Http\Requests\StoreShopRequest;
 use App\Http\Requests\UpdateShopRequest;
 use App\Models\Shop;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
+    use ManagesShops;
+
     protected $shopService;
 
     public function __construct(ShopService $shopService)
@@ -21,35 +24,7 @@ class ShopController extends Controller
 
     public function index(Request $request)
     {
-        $query = Shop::with('owner');
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-
-        $sort = $request->input('sort', 'newest');
-
-        // Always prioritize premium shops
-        $query->orderByRaw("CASE WHEN plan = 'premium' THEN 1 ELSE 2 END");
-
-        switch ($sort) {
-            case 'oldest':
-                $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
-                break;
-            case 'name':
-                $query->orderBy('name', 'asc');
-                break;
-            case 'newest':
-            default:
-                $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
-                break;
-        }
-
-        $shops = $query->paginate(9);
+        $shops = $this->getShopsQuery($request)->paginate(9);
         
         return view('shops.index', compact('shops'));
     }
@@ -61,7 +36,7 @@ class ShopController extends Controller
 
     public function store(StoreShopRequest $request)
     {
-        $this->shopService->createShop(Auth::user(), $request->validated());
+        $this->createShopData(Auth::user(), $request->validated());
 
         return redirect()->route('dashboard')->with('status', 'Shop created successfully!');
     }
@@ -76,57 +51,16 @@ class ShopController extends Controller
     {
         $this->authorize('update', $shop);
 
-        $this->shopService->updateShop($shop, $request->validated());
+        $this->updateShopData($shop, $request->validated());
 
         return redirect()->route('dashboard')->with('status', 'Shop updated successfully!');
     }
 
     public function show(Shop $shop)
     {
-        $user = Auth::user();
-        $visitCount = 0;
-        $progress = 0;
-
-        $rewards = [];
-        $history = [];
-
-        if ($user->id === $shop->user_id) {
-            // Shop Owner View: See all history
-            $history = $shop->visits()
-                ->with('customer')
-                ->latest('visited_at')
-                ->limit(50)
-                ->get();
-
-            $rewards = \App\Models\Reward::where('shop_id', $shop->id)
-                ->whereNotNull('redeemed_at')
-                ->with('user')
-                ->latest('redeemed_at')
-                ->limit(50)
-                ->get();
-        } elseif ($user->isCustomer()) {
-            // Customer View: See own history
-            $visitCount = $shop->visits()->where('user_id', $user->id)->count();
-            // Calculate progress towards next reward
-            $visitsRequired = $shop->visits_required;
-            $currentCycleVisits = $visitCount % $visitsRequired;
-            $progress = ($currentCycleVisits / $visitsRequired) * 100;
-
-            // Fetch Rewards
-            $rewards = \App\Models\Reward::where('user_id', $user->id)
-                ->where('shop_id', $shop->id)
-                ->where('status', 'available')
-                ->get();
-
-            // Fetch History
-            $history = $shop->visits()
-                ->where('user_id', $user->id)
-                ->latest('visited_at')
-                ->limit(10)
-                ->get();
-        }
-
-        return view('shops.show', compact('shop', 'visitCount', 'progress', 'rewards', 'history'));
+        $data = $this->getShopData($shop, Auth::user());
+        
+        return view('shops.show', $data);
     }
 
     public function scan()
