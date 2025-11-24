@@ -19,7 +19,18 @@ class Shop extends Model
         'logo_path',
         'reward_name',
         'reward_image_path',
+        'plan',
     ];
+
+    public function scopePremium($query)
+    {
+        return $query->where('plan', 'premium');
+    }
+
+    public function isPremium(): bool
+    {
+        return $this->plan === 'premium';
+    }
 
     public function owner(): BelongsTo
     {

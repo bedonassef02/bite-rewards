@@ -22,6 +22,7 @@ class ShopFactory extends Factory
             'description' => $this->faker->paragraph(),
             'visits_required' => $this->faker->numberBetween(5, 10),
             'reward_name' => 'Free ' . $this->faker->randomElement(['Coffee', 'Pastry', 'Sandwich', 'Drink']),
+            'plan' => $this->faker->randomElement(['basic', 'basic', 'basic', 'premium']), // 25% chance of premium
             // logo_path and reward_image_path can be null or fake paths
         ];
     }

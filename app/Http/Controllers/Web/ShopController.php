@@ -33,6 +33,9 @@ class ShopController extends Controller
 
         $sort = $request->input('sort', 'newest');
 
+        // Always prioritize premium shops
+        $query->orderByRaw("CASE WHEN plan = 'premium' THEN 1 ELSE 2 END");
+
         switch ($sort) {
             case 'oldest':
                 $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
