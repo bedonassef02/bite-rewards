@@ -17,6 +17,8 @@ class Shop extends Model
         'description',
         'visits_required',
         'logo_path',
+        'reward_name',
+        'reward_image_path',
     ];
 
     public function owner(): BelongsTo

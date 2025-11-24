@@ -50,9 +50,14 @@
                             <div class="grid gap-4">
                                 @foreach($rewards as $reward)
                                     <div class="p-6 bg-white border border-brand rounded-2xl shadow-sm flex items-center justify-between">
-                                        <div>
-                                            <p class="font-bold text-lg text-brand">Free Reward Available!</p>
-                                            <p class="text-sm text-gray-500">Earned on {{ $reward->created_at->format('M d, Y') }}</p>
+                                        <div class="flex items-center space-x-4">
+                                            @if($shop->reward_image_path)
+                                                <img src="{{ asset('storage/' . $shop->reward_image_path) }}" alt="Reward" class="w-12 h-12 rounded-lg object-cover">
+                                            @endif
+                                            <div>
+                                                <p class="font-bold text-lg text-brand">{{ $shop->reward_name ?? 'Free Reward Available!' }}</p>
+                                                <p class="text-sm text-gray-500">Earned on {{ $reward->created_at->format('M d, Y') }}</p>
+                                            </div>
                                         </div>
                                         <button class="px-6 py-2 bg-brand text-white rounded-full font-bold text-sm hover:bg-orange-600 transition">
                                             Redeem

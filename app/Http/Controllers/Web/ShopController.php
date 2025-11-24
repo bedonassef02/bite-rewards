@@ -41,6 +41,44 @@ class ShopController extends Controller
         return redirect()->route('dashboard')->with('status', 'Shop created successfully!');
     }
 
+    public function edit(Shop $shop)
+    {
+        if ($shop->user_id !== Auth::id()) {
+            abort(403);
+        }
+        return view('shops.edit', compact('shop'));
+    }
+
+    public function update(Request $request, Shop $shop)
+    {
+        if ($shop->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'visits_required' => 'integer|min:1',
+            'logo' => 'nullable|image|max:2048',
+            'reward_name' => 'nullable|string|max:255',
+            'reward_image' => 'nullable|image|max:2048',
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('logo')) {
+            $data['logo_path'] = $request->file('logo')->store('logos', 'public');
+        }
+
+        if ($request->hasFile('reward_image')) {
+            $data['reward_image_path'] = $request->file('reward_image')->store('rewards', 'public');
+        }
+
+        $shop->update($data);
+
+        return redirect()->route('dashboard')->with('status', 'Shop updated successfully!');
+    }
+
     public function show(Shop $shop)
     {
         $user = Auth::user();
