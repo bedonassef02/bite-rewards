@@ -27,6 +27,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/my-qr', function () {
         return view('customer.qr');
     })->name('customer.qr');
+
+    // Admin
+    Route::get('/admin', [\App\Http\Controllers\Web\AdminController::class, 'index'])->name('admin.dashboard');
+    Route::delete('/admin/shops/{shop}', [\App\Http\Controllers\Web\AdminController::class, 'deleteShop'])->name('admin.shops.delete');
 });
 
 Route::middleware('auth')->group(function () {
