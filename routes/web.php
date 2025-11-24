@@ -1,15 +1,33 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\ShopController;
+use App\Http\Controllers\Web\VisitController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Shops
+    Route::get('/shops', [ShopController::class, 'index'])->name('shops.index');
+    Route::get('/shops/create', [ShopController::class, 'create'])->name('shops.create');
+    Route::post('/shops', [ShopController::class, 'store'])->name('shops.store');
+    Route::get('/shops/scan', [ShopController::class, 'scan'])->name('shops.scan'); // Specific route before show
+    Route::get('/shops/{shop}', [ShopController::class, 'show'])->name('shops.show');
+
+    // Visits
+    Route::post('/visits', [VisitController::class, 'store'])->name('visits.store');
+
+    // Customer
+    Route::get('/my-qr', function () {
+        return view('customer.qr');
+    })->name('customer.qr');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
