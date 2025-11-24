@@ -21,8 +21,8 @@
 
                         <!-- Logo -->
                         <div class="mt-6">
-                            <x-input-label for="logo" :value="__('Shop Logo (Optional)')" />
-                            <input id="logo" name="logo" type="file" class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-brand hover:file:bg-orange-100" />
+                            <x-input-label for="logo" :value="__('Shop Logo')" />
+                            <input id="logo" name="logo" type="file" class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-brand hover:file:bg-orange-100" required />
                             <x-input-error :messages="$errors->get('logo')" class="mt-2" />
                         </div>
 
@@ -36,8 +36,8 @@
                         <!-- Visits Required -->
                         <div class="mt-6">
                             <x-input-label for="visits_required" :value="__('Visits Required for Reward')" />
-                            <x-text-input id="visits_required" class="block mt-1 w-full" type="number" name="visits_required" :value="old('visits_required', 10)" required />
-                            <p class="mt-2 text-sm text-gray-500">How many visits does a customer need to get a free item?</p>
+                            <x-text-input id="visits_required" class="block mt-1 w-full" type="number" name="visits_required" :value="old('visits_required', 10)" required min="3" max="10" />
+                            <p class="mt-2 text-sm text-gray-500">How many visits does a customer need to get a free item? (Min: 3, Max: 10)</p>
                             <x-input-error :messages="$errors->get('visits_required')" class="mt-2" />
                         </div>
 
@@ -47,14 +47,14 @@
                         <!-- Reward Name -->
                         <div class="mt-4">
                             <x-input-label for="reward_name" :value="__('Reward Name (e.g., Free Coffee)')" />
-                            <x-text-input id="reward_name" class="block mt-1 w-full" type="text" name="reward_name" :value="old('reward_name')" placeholder="Free Reward" />
+                            <x-text-input id="reward_name" class="block mt-1 w-full" type="text" name="reward_name" :value="old('reward_name')" placeholder="Free Reward" required />
                             <x-input-error :messages="$errors->get('reward_name')" class="mt-2" />
                         </div>
 
                         <!-- Reward Image -->
                         <div class="mt-6">
-                            <x-input-label for="reward_image" :value="__('Reward Image (Optional)')" />
-                            <input id="reward_image" name="reward_image" type="file" class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-brand hover:file:bg-orange-100" />
+                            <x-input-label for="reward_image" :value="__('Reward Image')" />
+                            <input id="reward_image" name="reward_image" type="file" class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-brand hover:file:bg-orange-100" required />
                             <x-input-error :messages="$errors->get('reward_image')" class="mt-2" />
                         </div>
 

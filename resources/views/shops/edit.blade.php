@@ -42,7 +42,7 @@
                         <!-- Visits Required -->
                         <div class="mt-6">
                             <x-input-label for="visits_required" :value="__('Visits Required for Reward')" />
-                            <x-text-input id="visits_required" class="block mt-1 w-full" type="number" name="visits_required" :value="old('visits_required', $shop->visits_required)" required />
+                            <x-text-input id="visits_required" class="block mt-1 w-full" type="number" name="visits_required" :value="old('visits_required', $shop->visits_required)" required min="3" max="10" />
                             <x-input-error :messages="$errors->get('visits_required')" class="mt-2" />
                         </div>
 

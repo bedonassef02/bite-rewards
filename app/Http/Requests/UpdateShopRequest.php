@@ -26,7 +26,7 @@ class UpdateShopRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'visits_required' => 'integer|min:1',
+            'visits_required' => 'integer|min:3|max:10',
             'logo' => 'nullable|image|max:2048',
             'reward_name' => 'nullable|string|max:255',
             'reward_image' => 'nullable|image|max:2048',
