@@ -3,27 +3,27 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Bite Rewards') }}</title>
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,600,700&display=swap" rel="stylesheet" />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+    <body class="antialiased bg-white text-gray-900 font-sans selection:bg-brand selection:text-white">
         
         <!-- Navigation -->
-        <nav class="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 shadow-sm">
+        <nav class="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
             <div class="flex items-center">
-                <a href="/" class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Bite Rewards</a>
+                <a href="/" class="text-3xl font-bold text-brand tracking-tight">Bite Rewards</a>
             </div>
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-6">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Dashboard</a>
+                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-brand transition">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Log in</a>
+                        <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-brand transition">Log in</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold">Get Started</a>
+                            <a href="{{ route('register') }}" class="px-6 py-2.5 bg-brand text-white rounded-full hover:bg-orange-600 transition font-bold shadow-lg shadow-orange-200">Get Started</a>
                         @endif
                     @endauth
                 @endif
@@ -31,104 +31,69 @@
         </nav>
 
         <!-- Hero Section -->
-        <div class="relative overflow-hidden bg-white dark:bg-gray-800">
-            <div class="max-w-7xl mx-auto">
-                <div class="relative z-10 pb-8 bg-white dark:bg-gray-800 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-                    <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                        <div class="sm:text-center lg:text-left">
-                            <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
-                                <span class="block xl:inline">Loyalty programs</span>
-                                <span class="block text-indigo-600 dark:text-indigo-400 xl:inline">made simple.</span>
-                            </h1>
-                            <p class="mt-3 text-base text-gray-500 dark:text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                                Connect shops and customers seamlessly. Shop owners track visits, customers earn rewards. No plastic cards, just QR codes.
-                            </p>
-                            <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                                <div class="rounded-md shadow">
-                                    <a href="{{ route('register') }}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                                        Join Now
-                                    </a>
-                                </div>
-                                <div class="mt-3 sm:mt-0 sm:ml-3">
-                                    <a href="#features" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10">
-                                        Learn More
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
-                </div>
-            </div>
-            <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-indigo-50 dark:bg-gray-900 flex items-center justify-center">
-                <!-- Abstract or Placeholder Image -->
-                <div class="p-10">
-                   <svg class="w-full h-full text-indigo-200 dark:text-indigo-900 opacity-50" fill="currentColor" viewBox="0 0 100 100">
-                       <circle cx="50" cy="50" r="40" />
-                   </svg>
-                   <div class="absolute inset-0 flex items-center justify-center">
-                       <span class="text-9xl">🍔</span>
-                   </div>
+        <div class="relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-32">
+                <div class="text-center">
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-8">
+                        Loyalty programs <br/>
+                        <span class="text-brand">reimagined.</span>
+                    </h1>
+                    <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500 mb-10">
+                        Connect shops and customers seamlessly. No plastic cards, just QR codes. Simple, elegant, and rewarding.
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <a href="{{ route('register') }}" class="px-8 py-4 bg-brand text-white rounded-full font-bold text-lg hover:bg-orange-600 transition shadow-xl shadow-orange-200 transform hover:-translate-y-1">
+                            Join Now
+                        </a>
+                        <a href="#features" class="px-8 py-4 bg-gray-100 text-gray-700 rounded-full font-bold text-lg hover:bg-gray-200 transition">
+                            Learn More
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Features Section -->
-        <div id="features" class="py-12 bg-gray-50 dark:bg-gray-900">
+        <div id="features" class="py-24 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="lg:text-center">
-                    <h2 class="text-base text-indigo-600 dark:text-indigo-400 font-semibold tracking-wide uppercase">Features</h2>
-                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                        A better way to reward
-                    </p>
-                    <p class="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-300 lg:mx-auto">
-                        Whether you are a business owner or a loyal customer, Bite Rewards makes the process effortless.
-                    </p>
-                </div>
-
-                <div class="mt-10">
-                    <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-                        <div class="relative">
-                            <dt>
-                                <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                                    <!-- Heroicon name: outline/globe-alt -->
-                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                                    </svg>
-                                </div>
-                                <p class="ml-16 text-lg leading-6 font-medium text-gray-900 dark:text-white">For Shop Owners</p>
-                            </dt>
-                            <dd class="mt-2 ml-16 text-base text-gray-500 dark:text-gray-300">
-                                Create your shop profile, set your reward milestones, and use our built-in QR scanner to track customer visits instantly.
-                            </dd>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <!-- Shop Owner Card -->
+                    <div class="bg-white p-10 rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100">
+                        <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 text-brand">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                         </div>
+                        <h3 class="text-2xl font-bold mb-4">For Shop Owners</h3>
+                        <p class="text-gray-600 leading-relaxed mb-6">
+                            Create your shop profile, set your reward milestones, and use our built-in QR scanner to track customer visits instantly.
+                        </p>
+                        <ul class="space-y-3 text-gray-500">
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Easy Setup</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Real-time Stats</li>
+                        </ul>
+                    </div>
 
-                        <div class="relative">
-                            <dt>
-                                <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                                    <!-- Heroicon name: outline/scale -->
-                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4h2v-4zM6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                <p class="ml-16 text-lg leading-6 font-medium text-gray-900 dark:text-white">For Customers</p>
-                            </dt>
-                            <dd class="mt-2 ml-16 text-base text-gray-500 dark:text-gray-300">
-                                Discover new places, track your progress, and earn free meals. Your personal QR code is all you need.
-                            </dd>
+                    <!-- Customer Card -->
+                    <div class="bg-white p-10 rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100">
+                        <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 text-brand">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4h2v-4zM6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
-                    </dl>
+                        <h3 class="text-2xl font-bold mb-4">For Customers</h3>
+                        <p class="text-gray-600 leading-relaxed mb-6">
+                            Discover new places, track your progress, and earn free meals. Your personal QR code is all you need.
+                        </p>
+                        <ul class="space-y-3 text-gray-500">
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> One Code for All</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Free Rewards</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-            <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
-                <div class="mt-8 md:mt-0 md:order-1">
-                    <p class="text-center text-base text-gray-400">
-                        &copy; {{ date('Y') }} Bite Rewards. All rights reserved.
-                    </p>
-                </div>
+        <footer class="bg-white border-t border-gray-100 py-12">
+            <div class="max-w-7xl mx-auto px-4 text-center text-gray-400">
+                &copy; {{ date('Y') }} Bite Rewards. Crafted with <span class="text-red-500">&hearts;</span>
             </div>
         </footer>
     </body>

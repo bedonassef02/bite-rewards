@@ -1,36 +1,44 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-bold mb-4">Welcome, Shop Owner!</h3>
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-3xl border border-gray-100">
+                <div class="p-8 text-gray-900">
+                    <h3 class="text-2xl font-bold mb-6">Welcome, Shop Owner!</h3>
                     
                     @if(Auth::user()->shops()->count() > 0)
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="p-4 bg-indigo-50 dark:bg-indigo-900 rounded-lg border border-indigo-200 dark:border-indigo-700">
-                                <h4 class="font-bold text-indigo-700 dark:text-indigo-300 mb-2">Scan Customer QR</h4>
-                                <p class="text-sm mb-4">Scan a customer's QR code to record a visit.</p>
-                                <a href="{{ route('shops.scan') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Scanner Card -->
+                            <div class="p-8 bg-orange-50 rounded-3xl border border-orange-100 hover:shadow-lg transition duration-300">
+                                <div class="w-12 h-12 bg-brand text-white rounded-xl flex items-center justify-center mb-4">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4h2v-4zM6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <h4 class="font-bold text-xl text-gray-900 mb-2">Scan Customer QR</h4>
+                                <p class="text-gray-600 mb-6">Ready to record a visit? Open the scanner to snap a customer's code.</p>
+                                <a href="{{ route('shops.scan') }}" class="inline-flex items-center px-6 py-3 bg-brand border border-transparent rounded-full font-bold text-white hover:bg-orange-600 transition shadow-lg shadow-orange-200">
                                     Open Scanner
                                 </a>
                             </div>
                             
-                            <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">Your Shop</h4>
-                                <p class="text-sm mb-4">{{ Auth::user()->shops()->first()->name }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Visits Required: {{ Auth::user()->shops()->first()->visits_required }}</p>
+                            <!-- Shop Details Card -->
+                            <div class="p-8 bg-gray-50 rounded-3xl border border-gray-100 hover:shadow-lg transition duration-300">
+                                <div class="w-12 h-12 bg-gray-800 text-white rounded-xl flex items-center justify-center mb-4">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                </div>
+                                <h4 class="font-bold text-xl text-gray-900 mb-2">Your Shop</h4>
+                                <p class="text-gray-600 mb-1 font-semibold">{{ Auth::user()->shops()->first()->name }}</p>
+                                <p class="text-sm text-gray-500">Visits Required: {{ Auth::user()->shops()->first()->visits_required }}</p>
                             </div>
                         </div>
                     @else
-                        <div class="text-center py-8">
-                            <p class="mb-4">You haven't registered a shop yet.</p>
-                            <a href="{{ route('shops.create') }}" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <div class="text-center py-12 bg-gray-50 rounded-3xl border border-dashed border-gray-300">
+                            <p class="mb-6 text-gray-500 text-lg">You haven't registered a shop yet.</p>
+                            <a href="{{ route('shops.create') }}" class="inline-flex items-center px-8 py-4 bg-brand border border-transparent rounded-full font-bold text-white hover:bg-orange-600 transition shadow-lg shadow-orange-200">
                                 Register Your Shop
                             </a>
                         </div>
