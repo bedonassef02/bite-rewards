@@ -3,12 +3,21 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreShopRequest;
+use App\Http\Requests\UpdateShopRequest;
 use App\Models\Shop;
-use Illuminate\Http\Request;
+use App\Services\ShopService;
 use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
+    protected $shopService;
+
+    public function __construct(ShopService $shopService)
+    {
+        $this->shopService = $shopService;
+    }
+
     public function index()
     {
         $shops = Shop::with('owner')->get();
@@ -20,61 +29,24 @@ class ShopController extends Controller
         return view('shops.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreShopRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'visits_required' => 'integer|min:1',
-            'logo' => 'nullable|image|max:2048', // 2MB Max
-        ]);
-
-        $data = $request->all();
-
-        if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('logos', 'public');
-            $data['logo_path'] = $path;
-        }
-
-        Auth::user()->shops()->create($data);
+        $this->shopService->createShop(Auth::user(), $request->validated());
 
         return redirect()->route('dashboard')->with('status', 'Shop created successfully!');
     }
 
     public function edit(Shop $shop)
     {
-        if ($shop->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('update', $shop);
         return view('shops.edit', compact('shop'));
     }
 
-    public function update(Request $request, Shop $shop)
+    public function update(UpdateShopRequest $request, Shop $shop)
     {
-        if ($shop->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('update', $shop);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'visits_required' => 'integer|min:1',
-            'logo' => 'nullable|image|max:2048',
-            'reward_name' => 'nullable|string|max:255',
-            'reward_image' => 'nullable|image|max:2048',
-        ]);
-
-        $data = $request->all();
-
-        if ($request->hasFile('logo')) {
-            $data['logo_path'] = $request->file('logo')->store('logos', 'public');
-        }
-
-        if ($request->hasFile('reward_image')) {
-            $data['reward_image_path'] = $request->file('reward_image')->store('rewards', 'public');
-        }
-
-        $shop->update($data);
+        $this->shopService->updateShop($shop, $request->validated());
 
         return redirect()->route('dashboard')->with('status', 'Shop updated successfully!');
     }
@@ -119,6 +91,9 @@ class ShopController extends Controller
         if (!$shop) {
             return redirect()->route('shops.create')->with('error', 'Please create a shop first.');
         }
+        
+        $this->authorize('scan', $shop);
+        
         return view('shops.scan', compact('shop'));
     }
 }
