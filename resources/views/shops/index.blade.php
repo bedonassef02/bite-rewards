@@ -13,15 +13,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             
             <!-- Search Bar -->
-            <div class="mb-10">
-                <form action="{{ route('shops.index') }}" method="GET" class="relative max-w-lg mx-auto">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                    <input type="text" name="search" value="{{ request('search') }}" class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-2xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand focus:border-brand sm:text-sm shadow-sm transition-shadow duration-200" placeholder="Search for shops...">
+            <div class="mb-20 max-w-2xl mx-auto">
+                <form action="{{ route('shops.index') }}" method="GET" class="relative group">
+                    <input type="text" name="search" value="{{ request('search') }}" class="block w-full px-8 py-4 border-2 border-gray-100 rounded-full leading-5 bg-white placeholder-gray-400 focus:outline-none focus:bg-white focus:border-brand focus:ring-0 text-lg shadow-sm hover:shadow-md transition-all duration-200 text-center" placeholder="Search for shops...">
                     @if(request('search'))
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <a href="{{ route('shops.index') }}" class="text-gray-400 hover:text-gray-600">
+                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                            <a href="{{ route('shops.index') }}" class="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                             </a>
                         </div>
