@@ -25,115 +25,184 @@
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10 pb-20">
         
-        <!-- Progress Card -->
-        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10 mb-10">
-            <div class="flex flex-col md:flex-row items-center justify-between mb-8">
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-900">Your Progress</h3>
-                    <p class="text-gray-500">Keep visiting to earn your next reward!</p>
-                </div>
-                <div class="mt-4 md:mt-0 bg-orange-50 text-brand px-5 py-2 rounded-xl font-bold text-lg">
-                    {{ $visitCount }} / {{ $shop->visits_required }} Visits
-                </div>
-            </div>
-
-            <div class="relative pt-1">
-                <div class="flex mb-2 items-center justify-between">
-                    <div>
-                        <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-brand bg-orange-100">
-                            {{ round($progress) }}% Completed
-                        </span>
+        @if(Auth::id() === $shop->user_id)
+            <!-- Shop Owner Dashboard -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Recent Visits (All Customers) -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-50 bg-gray-50/50">
+                        <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Recent Customer Visits
+                        </h3>
                     </div>
-                </div>
-                <div class="overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-gray-100 shadow-inner">
-                    <div style="width:{{ $progress }}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-orange-400 to-pink-500 transition-all duration-1000 ease-out"></div>
-                </div>
-            </div>
-
-            @if($progress >= 100 || ($visitCount > 0 && $visitCount % $shop->visits_required == 0))
-                <div class="mt-6 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl p-1 shadow-lg animate-pulse">
-                    <div class="bg-white rounded-xl p-6 text-center">
-                        <h4 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-700 mb-2">🎉 Reward Unlocked!</h4>
-                        <p class="text-gray-600">You've earned a free reward. Check below to redeem!</p>
-                    </div>
-                </div>
-            @endif
-        </div>
-
-        <!-- Rewards & History Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <!-- Available Rewards -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
-                    Available Rewards
-                </h3>
-                
-                @if(count($rewards) > 0)
-                    <div class="space-y-4">
-                        @foreach($rewards as $reward)
-                            <div class="bg-white border-2 border-dashed border-brand/30 rounded-2xl p-5 relative overflow-hidden group hover:border-brand transition-colors">
-                                <div class="absolute top-0 right-0 bg-brand text-white text-xs font-bold px-3 py-1 rounded-bl-xl">FREE</div>
-                                <div class="flex items-center space-x-4">
-                                    @if($shop->reward_image_path)
-                                        <img src="{{ asset('storage/' . $shop->reward_image_path) }}" alt="Reward" class="w-16 h-16 rounded-xl object-cover shadow-sm">
-                                    @else
-                                        <div class="w-16 h-16 rounded-xl bg-orange-50 flex items-center justify-center text-brand">
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                                        </div>
-                                    @endif
+                    <div class="divide-y divide-gray-100 max-h-[500px] overflow-y-auto">
+                        @forelse($history as $visit)
+                            <div class="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-brand/10 text-brand flex items-center justify-center font-bold">
+                                        {{ substr($visit->customer->name, 0, 1) }}
+                                    </div>
                                     <div>
-                                        <h4 class="font-bold text-gray-900 text-lg">{{ $shop->reward_name ?? 'Mystery Reward' }}</h4>
-                                        <p class="text-xs text-gray-500">Earned {{ $reward->created_at->diffForHumans() }}</p>
+                                        <p class="font-bold text-gray-900">{{ $visit->customer->name }}</p>
+                                        <p class="text-xs text-gray-500">{{ $visit->visited_at->format('M d, Y • h:i A') }}</p>
                                     </div>
                                 </div>
-                                <button class="mt-4 w-full py-2 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-brand transition-colors shadow-lg shadow-gray-200">
-                                    Redeem Now
-                                </button>
+                                <span class="text-xs font-mono text-gray-400">ID: #{{ $visit->id }}</span>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="p-8 text-center text-gray-500">
+                                No visits recorded yet.
+                            </div>
+                        @endforelse
                     </div>
-                @else
-                    <div class="bg-gray-50 rounded-2xl p-8 text-center border border-gray-100">
-                        <p class="text-gray-500">No rewards available yet. Keep visiting!</p>
+                </div>
+
+                <!-- Redeemed Rewards History -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-50 bg-gray-50/50">
+                        <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Redeemed Rewards
+                        </h3>
+                    </div>
+                    <div class="divide-y divide-gray-100 max-h-[500px] overflow-y-auto">
+                        @forelse($rewards as $reward)
+                            <div class="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-900">{{ $reward->user->name }}</p>
+                                        <p class="text-xs text-gray-500">Redeemed {{ $reward->redeemed_at->format('M d, Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block text-sm font-bold text-brand">{{ $shop->reward_name }}</span>
+                                    <span class="text-xs text-gray-400">{{ $reward->redeemed_at->format('h:i A') }}</span>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="p-8 text-center text-gray-500">
+                                No rewards redeemed yet.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        @else
+            <!-- Customer View -->
+            <!-- Progress Card -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10 mb-10">
+                <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900">Your Progress</h3>
+                        <p class="text-gray-500">Keep visiting to earn your next reward!</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 bg-orange-50 text-brand px-5 py-2 rounded-xl font-bold text-lg">
+                        {{ $visitCount }} / {{ $shop->visits_required }} Visits
+                    </div>
+                </div>
+
+                <div class="relative pt-1">
+                    <div class="flex mb-2 items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-brand bg-orange-100">
+                                {{ round($progress) }}% Completed
+                            </span>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-gray-100 shadow-inner">
+                        <div style="width:{{ $progress }}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-orange-400 to-pink-500 transition-all duration-1000 ease-out"></div>
+                    </div>
+                </div>
+
+                @if($progress >= 100 || ($visitCount > 0 && $visitCount % $shop->visits_required == 0))
+                    <div class="mt-6 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl p-1 shadow-lg animate-pulse">
+                        <div class="bg-white rounded-xl p-6 text-center">
+                            <h4 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-700 mb-2">🎉 Reward Unlocked!</h4>
+                            <p class="text-gray-600">You've earned a free reward. Check below to redeem!</p>
+                        </div>
                     </div>
                 @endif
             </div>
 
-            <!-- Visit History -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Recent Visits
-                </h3>
-
-                @if(count($history) > 0)
-                    <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
-                        <div class="divide-y divide-gray-100">
-                            @foreach($history as $visit)
-                                <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        </div>
+            <!-- Rewards & History Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Available Rewards -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                        Available Rewards
+                    </h3>
+                    
+                    @if(count($rewards) > 0)
+                        <div class="space-y-4">
+                            @foreach($rewards as $reward)
+                                <div class="bg-white border-2 border-dashed border-brand/30 rounded-2xl p-5 relative overflow-hidden group hover:border-brand transition-colors">
+                                    <div class="absolute top-0 right-0 bg-brand text-white text-xs font-bold px-3 py-1 rounded-bl-xl">FREE</div>
+                                    <div class="flex items-center space-x-4">
+                                        @if($shop->reward_image_path)
+                                            <img src="{{ asset('storage/' . $shop->reward_image_path) }}" alt="Reward" class="w-16 h-16 rounded-xl object-cover shadow-sm">
+                                        @else
+                                            <div class="w-16 h-16 rounded-xl bg-orange-50 flex items-center justify-center text-brand">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                                            </div>
+                                        @endif
                                         <div>
-                                            <p class="font-bold text-gray-900 text-sm">Visit Recorded</p>
-                                            <p class="text-xs text-gray-500">{{ $visit->visited_at->format('M d, Y') }}</p>
+                                            <h4 class="font-bold text-gray-900 text-lg">{{ $shop->reward_name ?? 'Mystery Reward' }}</h4>
+                                            <p class="text-xs text-gray-500">Earned {{ $reward->created_at->diffForHumans() }}</p>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono text-gray-400">{{ $visit->visited_at->format('h:i A') }}</span>
+                                    <button class="mt-4 w-full py-2 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-brand transition-colors shadow-lg shadow-gray-200">
+                                        Redeem Now
+                                    </button>
                                 </div>
                             @endforeach
                         </div>
-                    </div>
-                @else
-                    <div class="bg-gray-50 rounded-2xl p-8 text-center border border-gray-100">
-                        <p class="text-gray-500">No visits recorded yet.</p>
-                    </div>
-                @endif
+                    @else
+                        <div class="bg-gray-50 rounded-2xl p-8 text-center border border-gray-100">
+                            <p class="text-gray-500">No rewards available yet. Keep visiting!</p>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Visit History -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Recent Visits
+                    </h3>
+
+                    @if(count($history) > 0)
+                        <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
+                            <div class="divide-y divide-gray-100">
+                                @foreach($history as $visit)
+                                    <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-gray-900 text-sm">Visit Recorded</p>
+                                                <p class="text-xs text-gray-500">{{ $visit->visited_at->format('M d, Y') }}</p>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs font-mono text-gray-400">{{ $visit->visited_at->format('h:i A') }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-gray-50 rounded-2xl p-8 text-center border border-gray-100">
+                            <p class="text-gray-500">No visits recorded yet.</p>
+                        </div>
+                    @endif
+                </div>
             </div>
-        </div>
+        @endif
 
         <!-- Floating QR Action -->
         <div class="fixed bottom-8 right-8 z-50">

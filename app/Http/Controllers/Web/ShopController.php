@@ -72,7 +72,22 @@ class ShopController extends Controller
         $rewards = [];
         $history = [];
 
-        if ($user->isCustomer()) {
+        if ($user->id === $shop->user_id) {
+            // Shop Owner View: See all history
+            $history = $shop->visits()
+                ->with('customer')
+                ->latest('visited_at')
+                ->limit(50)
+                ->get();
+
+            $rewards = \App\Models\Reward::where('shop_id', $shop->id)
+                ->whereNotNull('redeemed_at')
+                ->with('user')
+                ->latest('redeemed_at')
+                ->limit(50)
+                ->get();
+        } elseif ($user->isCustomer()) {
+            // Customer View: See own history
             $visitCount = $shop->visits()->where('user_id', $user->id)->count();
             // Calculate progress towards next reward
             $visitsRequired = $shop->visits_required;
