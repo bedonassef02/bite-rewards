@@ -7,6 +7,7 @@ use App\Http\Requests\StoreShopRequest;
 use App\Http\Requests\UpdateShopRequest;
 use App\Models\Shop;
 use App\Services\ShopService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
@@ -18,9 +19,20 @@ class ShopController extends Controller
         $this->shopService = $shopService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $shops = Shop::with('owner')->get();
+        $query = Shop::with('owner');
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $shops = $query->paginate(9);
+        
         return view('shops.index', compact('shops'));
     }
 
