@@ -31,6 +31,18 @@ class ShopController extends Controller
             });
         }
 
+        switch ($request->input('sort')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'name':
+                $query->orderBy('name');
+                break;
+            default:
+                $query->latest();
+                break;
+        }
+
         $shops = $query->paginate(9);
         
         return view('shops.index', compact('shops'));

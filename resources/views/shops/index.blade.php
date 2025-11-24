@@ -12,18 +12,47 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             
-            <!-- Search Bar -->
-            <div class="mb-20 max-w-2xl mx-auto">
-                <form action="{{ route('shops.index') }}" method="GET" class="relative group">
-                    <input type="text" name="search" value="{{ request('search') }}" class="block w-full px-8 py-4 border-2 border-gray-100 rounded-full leading-5 bg-white placeholder-gray-400 focus:outline-none focus:bg-white focus:border-brand focus:ring-0 text-lg shadow-sm hover:shadow-md transition-all duration-200 text-center" placeholder="Search for shops...">
-                    @if(request('search'))
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                            <a href="{{ route('shops.index') }}" class="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            </a>
+            <!-- Search & Sort -->
+            <div class="mb-12 flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
+                <!-- Search Bar -->
+                <div class="flex-grow relative group">
+                    <form action="{{ route('shops.index') }}" method="GET" class="w-full">
+                        @if(request('sort'))
+                            <input type="hidden" name="sort" value="{{ request('sort') }}">
+                        @endif
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                            <svg class="h-6 w-6 text-gray-400 group-focus-within:text-brand transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
-                    @endif
-                </form>
+                        <input type="text" name="search" value="{{ request('search') }}" class="block w-full pl-14 pr-12 py-4 border-2 border-gray-100 rounded-full leading-5 bg-white placeholder-gray-400 focus:outline-none focus:bg-white focus:border-brand focus:ring-0 text-lg shadow-sm hover:shadow-md transition-all duration-200" placeholder="Search for shops...">
+                        @if(request('search'))
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                                <a href="{{ route('shops.index', ['sort' => request('sort')]) }}" class="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </a>
+                            </div>
+                        @endif
+                    </form>
+                </div>
+
+                <!-- Sort Dropdown -->
+                <div class="flex-shrink-0 relative" x-data="{ open: false }">
+                    <button @click="open = !open" @click.away="open = false" class="w-full md:w-48 h-full px-6 py-4 bg-white border-2 border-gray-100 rounded-full flex items-center justify-between text-gray-700 font-medium hover:border-brand hover:text-brand transition-all duration-200 shadow-sm">
+                        <span>
+                            @switch(request('sort'))
+                                @case('oldest') Oldest First @break
+                                @case('name') Name (A-Z) @break
+                                @default Newest First
+                            @endswitch
+                        </span>
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    
+                    <div x-show="open" class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50" style="display: none;">
+                        <a href="{{ route('shops.index', ['search' => request('search'), 'sort' => 'newest']) }}" class="block px-4 py-2 text-gray-700 hover:bg-orange-50 hover:text-brand">Newest First</a>
+                        <a href="{{ route('shops.index', ['search' => request('search'), 'sort' => 'oldest']) }}" class="block px-4 py-2 text-gray-700 hover:bg-orange-50 hover:text-brand">Oldest First</a>
+                        <a href="{{ route('shops.index', ['search' => request('search'), 'sort' => 'name']) }}" class="block px-4 py-2 text-gray-700 hover:bg-orange-50 hover:text-brand">Name (A-Z)</a>
+                    </div>
+                </div>
             </div>
 
             @if($shops->count() > 0)
