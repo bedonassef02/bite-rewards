@@ -15,6 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-600 hover:text-brand active:text-brand">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if(Auth::user()->isShopOwner())
+                        <x-nav-link :href="route('shops.plans')" :active="request()->routeIs('shops.plans')" class="text-gray-600 hover:text-brand active:text-brand">
+                            {{ __('Pricing') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

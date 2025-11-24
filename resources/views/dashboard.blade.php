@@ -28,7 +28,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <!-- Scanner Card -->
                             <div class="p-8 bg-white rounded-3xl border border-gray-100 hover:shadow-lg transition duration-300">
                                 <div class="w-12 h-12 bg-brand text-white rounded-xl flex items-center justify-center mb-4">
@@ -52,6 +52,36 @@
                                 <h4 class="font-bold text-xl text-gray-900 mb-2">{{ $shop->name }}</h4>
                                 <p class="text-gray-600 mb-1 font-semibold">Reward: {{ $shop->reward_name ?? 'Free Reward' }}</p>
                                 <p class="text-sm text-gray-500">Visits Required: {{ $shop->visits_required }}</p>
+                            </div>
+
+                            <!-- Plan Status Card -->
+                            <div class="p-8 {{ $shop->isPremium() ? 'bg-gradient-to-br from-brand to-pink-600' : 'bg-white' }} rounded-3xl border {{ $shop->isPremium() ? 'border-brand' : 'border-gray-100' }} hover:shadow-lg transition duration-300">
+                                <div class="w-12 h-12 {{ $shop->isPremium() ? 'bg-white/20' : 'bg-purple-100' }} {{ $shop->isPremium() ? 'text-white' : 'text-purple-600' }} rounded-xl flex items-center justify-center mb-4">
+                                    @if($shop->isPremium())
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                    @else
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    @endif
+                                </div>
+                                <h4 class="font-bold text-xl {{ $shop->isPremium() ? 'text-white' : 'text-gray-900' }} mb-2">
+                                    {{ $shop->isPremium() ? 'Premium Plan' : 'Basic Plan' }}
+                                </h4>
+                                <p class="{{ $shop->isPremium() ? 'text-white/90' : 'text-gray-600' }} mb-6">
+                                    @if($shop->isPremium())
+                                        You're featured! Your shop appears at the top of search results.
+                                    @else
+                                        Upgrade to get featured and attract more customers.
+                                    @endif
+                                </p>
+                                @if($shop->isPremium())
+                                    <span class="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full font-bold text-white">
+                                        Active
+                                    </span>
+                                @else
+                                    <a href="{{ route('shops.plans') }}" class="inline-flex items-center px-6 py-3 bg-brand border border-transparent rounded-full font-bold text-white hover:bg-orange-600 transition shadow-lg shadow-orange-200">
+                                        Upgrade Now
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     @else
