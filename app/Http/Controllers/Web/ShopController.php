@@ -31,15 +31,18 @@ class ShopController extends Controller
             });
         }
 
-        switch ($request->input('sort')) {
+        $sort = $request->input('sort', 'newest');
+
+        switch ($sort) {
             case 'oldest':
-                $query->oldest();
+                $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
                 break;
             case 'name':
-                $query->orderBy('name');
+                $query->orderBy('name', 'asc');
                 break;
+            case 'newest':
             default:
-                $query->latest();
+                $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
                 break;
         }
 
