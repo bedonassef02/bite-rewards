@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $shop = Shop::factory()->create([
             'user_id' => $owner->id,
             'name' => 'Bite Coffee',
+            'slug' => 'bite-coffee',
             'description' => 'The best coffee in town. Earn rewards for every cup!',
             'visits_required' => 5,
             'reward_name' => 'Free Coffee',

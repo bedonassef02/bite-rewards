@@ -16,9 +16,12 @@ class ShopFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->company() . ' ' . $this->faker->randomElement(['Cafe', 'Bakery', 'Bistro', 'Coffee', 'Eats']);
+        
         return [
             'user_id' => \App\Models\User::factory(),
-            'name' => $this->faker->company() . ' ' . $this->faker->randomElement(['Cafe', 'Bakery', 'Bistro', 'Coffee', 'Eats']),
+            'name' => $name,
+            'slug' => \Illuminate\Support\Str::slug($name) . '-' . $this->faker->unique()->numberBetween(1000, 9999),
             'description' => $this->faker->paragraph(),
             'visits_required' => $this->faker->numberBetween(5, 10),
             'reward_name' => 'Free ' . $this->faker->randomElement(['Coffee', 'Pastry', 'Sandwich', 'Drink']),
