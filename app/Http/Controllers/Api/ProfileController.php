@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\DeleteAccountRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 
 class ProfileController extends Controller
 {
@@ -15,16 +16,10 @@ class ProfileController extends Controller
         return response()->json(Auth::user());
     }
 
-    public function update(Request $request)
+    public function update(ProfileUpdateRequest $request)
     {
         $user = Auth::user();
-
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-        ]);
-
-        $user->update($validated);
+        $user->update($request->validated());
 
         return response()->json([
             'message' => 'Profile updated successfully',
@@ -32,27 +27,18 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatePasswordRequest $request)
     {
-        $validated = $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
         $user = Auth::user();
         $user->update([
-            'password' => Hash::make($validated['password']),
+            'password' => Hash::make($request->validated()['password']),
         ]);
 
         return response()->json(['message' => 'Password updated successfully']);
     }
 
-    public function destroy(Request $request)
+    public function destroy(DeleteAccountRequest $request)
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
         $user = Auth::user();
         
         Auth::logout();
