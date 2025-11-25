@@ -14,6 +14,23 @@ class VisitService
      */
     public function recordVisit(Shop $shop, User $customer): array
     {
+        // Check if customer already visited today
+        $existingVisitToday = Visit::where('user_id', $customer->id)
+            ->where('shop_id', $shop->id)
+            ->whereDate('visited_at', today())
+            ->exists();
+
+        if ($existingVisitToday) {
+            return [
+                'success' => false,
+                'message' => 'You have already visited this shop today. Come back tomorrow!',
+                'total_visits' => Visit::where('user_id', $customer->id)
+                    ->where('shop_id', $shop->id)
+                    ->count(),
+                'reward_earned' => false,
+            ];
+        }
+
         // 1. Create Visit
         Visit::create([
             'user_id' => $customer->id,

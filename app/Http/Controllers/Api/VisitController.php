@@ -53,6 +53,10 @@ class VisitController extends Controller
 
         $result = $this->visitService->recordVisit($shop, $customer);
 
+        if (!$result['success']) {
+            return response()->json($result, 400);
+        }
+
         return response()->json($result);
     }
 }
